@@ -1,0 +1,221 @@
+{
+ "term_overlap_top": [
+  {
+   "a": "bio/aa1",
+   "b": "com/mor",
+   "shared": 20,
+   "containment": 1.0,
+   "jaccard": 0.4167
+  },
+  {
+   "a": "bio/aa3",
+   "b": "trp/iata",
+   "shared": 18,
+   "containment": 0.9,
+   "jaccard": 0.002
+  },
+  {
+   "a": "lng/ioc",
+   "b": "trp/iata",
+   "shared": 187,
+   "containment": 0.8274,
+   "jaccard": 0.0206
+  },
+  {
+   "a": "lng/i31",
+   "b": "trp/iata",
+   "shared": 201,
+   "containment": 0.8072,
+   "jaccard": 0.0221
+  },
+  {
+   "a": "fin/i42",
+   "b": "trp/iata",
+   "shared": 123,
+   "containment": 0.691,
+   "jaccard": 0.0135
+  },
+  {
+   "a": "lng/i31",
+   "b": "lng/ioc",
+   "shared": 126,
+   "containment": 0.5575,
+   "jaccard": 0.361
+  },
+  {
+   "a": "bio/aa1",
+   "b": "cls/elm",
+   "shared": 11,
+   "containment": 0.55,
+   "jaccard": 0.0866
+  },
+  {
+   "a": "cls/elm",
+   "b": "com/mor",
+   "shared": 14,
+   "containment": 0.2917,
+   "jaccard": 0.0921
+  },
+  {
+   "a": "bio/aa3",
+   "b": "lng/i31",
+   "shared": 2,
+   "containment": 0.1,
+   "jaccard": 0.0075
+  },
+  {
+   "a": "bio/aa3",
+   "b": "lng/ioc",
+   "shared": 1,
+   "containment": 0.05,
+   "jaccard": 0.0041
+  },
+  {
+   "a": "fin/i42",
+   "b": "lng/ioc",
+   "shared": 5,
+   "containment": 0.0281,
+   "jaccard": 0.0125
+  },
+  {
+   "a": "fin/i42",
+   "b": "lng/i31",
+   "shared": 4,
+   "containment": 0.0225,
+   "jaccard": 0.0095
+  }
+ ],
+ "cross_domain_overlap_count": 11,
+ "most_universal_literal": [
+  {
+   "literal": "SLE",
+   "k": 4,
+   "systems": [
+    "fin/i42",
+    "lng/i31",
+    "lng/ioc",
+    "trp/iata"
+   ]
+  },
+  {
+   "literal": "ARG",
+   "k": 4,
+   "systems": [
+    "bio/aa3",
+    "lng/i31",
+    "lng/ioc",
+    "trp/iata"
+   ]
+  },
+  {
+   "literal": "KIR",
+   "k": 3,
+   "systems": [
+    "lng/i31",
+    "lng/ioc",
+    "trp/iata"
+   ]
+  },
+  {
+   "literal": "CPV",
+   "k": 3,
+   "systems": [
+    "lng/i31",
+    "lng/ioc",
+    "trp/iata"
+   ]
+  },
+  {
+   "literal": "GHA",
+   "k": 3,
+   "systems": [
+    "lng/i31",
+    "lng/ioc",
+    "trp/iata"
+   ]
+  },
+  {
+   "literal": "BTN",
+   "k": 3,
+   "systems": [
+    "fin/i42",
+    "lng/i31",
+    "trp/iata"
+   ]
+  },
+  {
+   "literal": "FSM",
+   "k": 3,
+   "systems": [
+    "lng/i31",
+    "lng/ioc",
+    "trp/iata"
+   ]
+  },
+  {
+   "literal": "GIB",
+   "k": 3,
+   "systems": [
+    "lng/i31",
+    "lng/ioc",
+    "trp/iata"
+   ]
+  },
+  {
+   "literal": "GBR",
+   "k": 3,
+   "systems": [
+    "lng/i31",
+    "lng/ioc",
+    "trp/iata"
+   ]
+  },
+  {
+   "literal": "MLT",
+   "k": 3,
+   "systems": [
+    "lng/i31",
+    "lng/ioc",
+    "trp/iata"
+   ]
+  }
+ ],
+ "n_domains": 7,
+ "max_domain_span_of_any_literal": 3,
+ "country_axis": {
+  "systems_with_country_key": [
+   "fin/i42",
+   "lng/i31",
+   "lng/ioc",
+   "trp/iata",
+   "trp/icao"
+  ],
+  "coverage_vs_iso3166": {
+   "lng/i31": 1.0,
+   "lng/ioc": 1.0,
+   "trp/iata": 0.9958,
+   "trp/icao": 0.9916,
+   "fin/i42": 1.0
+  },
+  "joinable_cluster": [
+   "fin/i42",
+   "lng/i31",
+   "lng/ioc",
+   "trp/iata",
+   "trp/icao"
+  ],
+  "isolated_systems": [
+   "bio/aa1",
+   "bio/aa3",
+   "cls/elm",
+   "cmp/sts",
+   "com/mor"
+  ]
+ },
+ "verdict": {
+  "universal_code_exists": false,
+  "universal_join_axis": "pais (ISO 3166)",
+  "joinable_cluster_size": 5,
+  "isolated_count": 5
+ }
+}

@@ -1,0 +1,15 @@
+# ambiente reproduzivel pelo bootstrap, nao versionado
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# lixo de OS / editor
+.DS_Store
+*.swp
+*~
+
+# embedder e5 baixado pelo bootstrap fica no volume, fora do repo (ver bootstrap.sh)
+
+# artefatos do rig (rig/out/) SAO versionados: reproduziveis, deterministicos,
+# servem de diff visivel dos resultados. nao ignorar.

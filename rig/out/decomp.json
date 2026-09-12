@@ -1,0 +1,26 @@
+{
+ "raw_all": {
+  "recall@1": 0.6078,
+  "tokens_per_answer": 35.4
+ },
+ "raw_curated": {
+  "recall@1": 0.549,
+  "tokens_per_answer": 17.3
+ },
+ "verb": {
+  "recall@1": 0.9216,
+  "tokens_per_answer": 22.6
+ },
+ "_decomposition": {
+  "field_drop_recall_pp": -5.9,
+  "field_drop_token_ratio": 0.489,
+  "prose_recall_pp": 37.3,
+  "prose_token_ratio": 1.306,
+  "total_recall_pp": 31.4,
+  "total_token_ratio": 0.638,
+  "embedder": "e5",
+  "granularity": "record",
+  "key": "bare",
+  "n_questions": 51
+ }
+}

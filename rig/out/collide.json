@@ -1,0 +1,497 @@
+{
+ "_meta": {
+  "n_literais_colidentes": 460,
+  "k_hist": {
+   "2": 337,
+   "3": 121,
+   "4": 2
+  },
+  "ambiguity_cost_bare": 0.5449,
+  "bare_random_tie_ceiling": 0.3297,
+  "n_pairs": 182,
+  "worst": [
+   {
+    "literal": "ARG",
+    "k": 4,
+    "systems": [
+     "bio/aa3",
+     "lng/i31",
+     "lng/ioc",
+     "trp/iata"
+    ]
+   },
+   {
+    "literal": "SLE",
+    "k": 4,
+    "systems": [
+     "fin/i42",
+     "lng/i31",
+     "lng/ioc",
+     "trp/iata"
+    ]
+   },
+   {
+    "literal": "ALA",
+    "k": 3,
+    "systems": [
+     "bio/aa3",
+     "lng/i31",
+     "trp/iata"
+    ]
+   },
+   {
+    "literal": "ALB",
+    "k": 3,
+    "systems": [
+     "lng/i31",
+     "lng/ioc",
+     "trp/iata"
+    ]
+   },
+   {
+    "literal": "AND",
+    "k": 3,
+    "systems": [
+     "lng/i31",
+     "lng/ioc",
+     "trp/iata"
+    ]
+   },
+   {
+    "literal": "AIA",
+    "k": 3,
+    "systems": [
+     "lng/i31",
+     "lng/ioc",
+     "trp/iata"
+    ]
+   },
+   {
+    "literal": "ARM",
+    "k": 3,
+    "systems": [
+     "lng/i31",
+     "lng/ioc",
+     "trp/iata"
+    ]
+   },
+   {
+    "literal": "AUS",
+    "k": 3,
+    "systems": [
+     "lng/i31",
+     "lng/ioc",
+     "trp/iata"
+    ]
+   },
+   {
+    "literal": "AUT",
+    "k": 3,
+    "systems": [
+     "lng/i31",
+     "lng/ioc",
+     "trp/iata"
+    ]
+   },
+   {
+    "literal": "BLR",
+    "k": 3,
+    "systems": [
+     "lng/i31",
+     "lng/ioc",
+     "trp/iata"
+    ]
+   },
+   {
+    "literal": "BEL",
+    "k": 3,
+    "systems": [
+     "lng/i31",
+     "lng/ioc",
+     "trp/iata"
+    ]
+   },
+   {
+    "literal": "BEN",
+    "k": 3,
+    "systems": [
+     "lng/i31",
+     "lng/ioc",
+     "trp/iata"
+    ]
+   },
+   {
+    "literal": "BTN",
+    "k": 3,
+    "systems": [
+     "fin/i42",
+     "lng/i31",
+     "trp/iata"
+    ]
+   },
+   {
+    "literal": "BIH",
+    "k": 3,
+    "systems": [
+     "lng/i31",
+     "lng/ioc",
+     "trp/iata"
+    ]
+   },
+   {
+    "literal": "BRA",
+    "k": 3,
+    "systems": [
+     "lng/i31",
+     "lng/ioc",
+     "trp/iata"
+    ]
+   }
+  ]
+ },
+ "routing": {
+  "minilm": {
+   "n_pairs": 182,
+   "acc_bare_context_free": 0.3297,
+   "acc_intent_verbalized": 0.9835,
+   "acc_namespaced": 1.0
+  },
+  "e5": {
+   "n_pairs": 182,
+   "acc_bare_context_free": 0.3297,
+   "acc_intent_verbalized": 0.989,
+   "acc_namespaced": 1.0
+  }
+ },
+ "dataset": {
+  "n_systems": 58,
+  "n_literals_total": 623141,
+  "n_literals_collided": 14911,
+  "k_hist": {
+   "2": 4674,
+   "3": 2966,
+   "4": 3324,
+   "5": 2672,
+   "6": 961,
+   "7": 245,
+   "8": 56,
+   "9": 8,
+   "10": 3,
+   "11": 2
+  },
+  "worst": [
+   {
+    "literal": "AND",
+    "k": 11,
+    "systems": [
+     "cmp/asm",
+     "grf/gql",
+     "grf/shc",
+     "lng/b47",
+     "lng/i31",
+     "lng/i63",
+     "lng/ioc",
+     "trp/iata",
+     "trp/ica2",
+     "trp/unl",
+     "wrt/iau"
+    ]
+   },
+   {
+    "literal": "CAR",
+    "k": 11,
+    "systems": [
+     "cmp/ext",
+     "fin/tck",
+     "grf/sch",
+     "grf/vcd",
+     "lng/b47",
+     "lng/i63",
+     "trp/iata",
+     "trp/ica2",
+     "trp/tld",
+     "trp/unl",
+     "wrt/iau"
+    ]
+   },
+   {
+    "literal": "COM",
+    "k": 10,
+    "systems": [
+     "cmp/ext",
+     "lng/b47",
+     "lng/i31",
+     "lng/i63",
+     "lng/ioc",
+     "trp/iata",
+     "trp/ica2",
+     "trp/tld",
+     "trp/unl",
+     "wrt/iau"
+    ]
+   },
+   {
+    "literal": "FOR",
+    "k": 10,
+    "systems": [
+     "cmp/ext",
+     "fin/tck",
+     "grf/gql",
+     "grf/lpg",
+     "lng/b47",
+     "lng/i63",
+     "trp/iata",
+     "trp/ica2",
+     "trp/unl",
+     "wrt/iau"
+    ]
+   },
+   {
+    "literal": "MET",
+    "k": 10,
+    "systems": [
+     "bio/aa3",
+     "bio/gen",
+     "fin/tck",
+     "grf/vcd",
+     "lng/b47",
+     "lng/i63",
+     "trp/iata",
+     "trp/ica2",
+     "trp/unl",
+     "wrt/tz"
+    ]
+   },
+   {
+    "literal": "ADD",
+    "k": 9,
+    "systems": [
+     "cmp/asm",
+     "cmp/git",
+     "grf/act",
+     "grf/gql",
+     "lng/b47",
+     "lng/i63",
+     "trp/iata",
+     "trp/ica2",
+     "trp/unl"
+    ]
+   },
+   {
+    "literal": "BAR",
+    "k": 9,
+    "systems": [
+     "cmp/vim",
+     "fin/tck",
+     "lng/b47",
+     "lng/i63",
+     "lng/ioc",
+     "trp/iata",
+     "trp/ica2",
+     "trp/tld",
+     "trp/unl"
+    ]
+   },
+   {
+    "literal": "MAX",
+    "k": 9,
+    "systems": [
+     "bio/gen",
+     "cmp/css",
+     "cmp/ext",
+     "fin/tck",
+     "lng/b47",
+     "lng/i63",
+     "trp/iata",
+     "trp/ica2",
+     "trp/unl"
+    ]
+   },
+   {
+    "literal": "MOV",
+    "k": 9,
+    "systems": [
+     "cmp/asm",
+     "cmp/ext",
+     "fin/tck",
+     "lng/b47",
+     "lng/i63",
+     "trp/iata",
+     "trp/ica2",
+     "trp/tld",
+     "trp/unl"
+    ]
+   },
+   {
+    "literal": "PNG",
+    "k": 9,
+    "systems": [
+     "cmp/ext",
+     "cmp/frc",
+     "lng/b47",
+     "lng/i31",
+     "lng/i63",
+     "lng/ioc",
+     "trp/iata",
+     "trp/ica2",
+     "trp/unl"
+    ]
+   },
+   {
+    "literal": "SLE",
+    "k": 9,
+    "systems": [
+     "fin/i42",
+     "fin/tck",
+     "lng/b47",
+     "lng/i31",
+     "lng/i63",
+     "lng/ioc",
+     "trp/iata",
+     "trp/ica2",
+     "trp/unl"
+    ]
+   },
+   {
+    "literal": "TGA",
+    "k": 9,
+    "systems": [
+     "bio/cdn",
+     "cmp/ext",
+     "cmp/frc",
+     "lng/b47",
+     "lng/i63",
+     "lng/ioc",
+     "trp/iata",
+     "trp/ica2",
+     "trp/unl"
+    ]
+   },
+   {
+    "literal": "USA",
+    "k": 9,
+    "systems": [
+     "fin/tck",
+     "grf/lpg",
+     "lng/b47",
+     "lng/i31",
+     "lng/i63",
+     "lng/ioc",
+     "trp/iata",
+     "trp/ica2",
+     "trp/unl"
+    ]
+   },
+   {
+    "literal": "AAA",
+    "k": 8,
+    "systems": [
+     "bio/cdn",
+     "cmp/asm",
+     "lng/b47",
+     "lng/i63",
+     "trp/iata",
+     "trp/ica2",
+     "trp/tld",
+     "trp/unl"
+    ]
+   },
+   {
+    "literal": "AAC",
+    "k": 8,
+    "systems": [
+     "bio/cdn",
+     "cmp/ext",
+     "cmp/frc",
+     "lng/b47",
+     "lng/i63",
+     "trp/iata",
+     "trp/ica2",
+     "trp/unl"
+    ]
+   },
+   {
+    "literal": "AMT",
+    "k": 8,
+    "systems": [
+     "bio/gen",
+     "fin/tck",
+     "lng/b47",
+     "lng/i63",
+     "trp/iata",
+     "trp/ica2",
+     "trp/unl",
+     "wrt/tz"
+    ]
+   },
+   {
+    "literal": "APP",
+    "k": 8,
+    "systems": [
+     "bio/gen",
+     "fin/tck",
+     "lng/b47",
+     "lng/i63",
+     "trp/iata",
+     "trp/ica2",
+     "trp/tld",
+     "trp/unl"
+    ]
+   },
+   {
+    "literal": "AS",
+    "k": 8,
+    "systems": [
+     "cls/elm",
+     "cls/loc",
+     "cmp/vim",
+     "fin/tck",
+     "grf/gql",
+     "lng/b47",
+     "lng/i39",
+     "trp/tld"
+    ]
+   },
+   {
+    "literal": "BID",
+    "k": 8,
+    "systems": [
+     "bio/gen",
+     "fin/tck",
+     "lng/b47",
+     "lng/i63",
+     "trp/iata",
+     "trp/ica2",
+     "trp/tld",
+     "trp/unl"
+    ]
+   },
+   {
+    "literal": "BOT",
+    "k": 8,
+    "systems": [
+     "fin/tck",
+     "lng/b47",
+     "lng/i63",
+     "lng/ioc",
+     "trp/iata",
+     "trp/ica2",
+     "trp/tld",
+     "trp/unl"
+    ]
+   }
+  ],
+  "most_collided_systems": {
+   "trp/unl": 13218,
+   "trp/iata": 9019,
+   "lng/b47": 8652,
+   "lng/i63": 8084,
+   "trp/ica2": 5785,
+   "fin/tck": 2606,
+   "bio/gen": 717,
+   "trp/tld": 706,
+   "cls/icd": 489,
+   "com/tlg": 361
+  }
+ }
+}

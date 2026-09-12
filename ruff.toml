@@ -1,0 +1,14 @@
+# lint idiomatico do python do projeto. ver https://docs.astral.sh/ruff
+target-version = "py311"
+line-length = 110
+
+[lint]
+select = ["E", "F", "W", "I"]   # pyflakes, pycodestyle, warnings, isort
+# E402: import depois de codigo. intencional: cada modulo de rig/exp insere lib/
+#       no sys.path ANTES dos imports locais (padrao de runner do projeto, adr 0003)
+# E741: nomes de 1 letra (l, k) em compreensoes curtas, legiveis no contexto
+ignore = ["E402", "E741"]
+
+[lint.per-file-ignores]
+# os blocos __main__ dos experimentos imprimem relatorio em pt; ok
+"rig/exp/*.py" = ["E501"]   # algumas linhas de print formatado passam de 110

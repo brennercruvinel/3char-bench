@@ -1,0 +1,292 @@
+{
+ "_meta": {
+  "n_questions": 51,
+  "cap_per_system": 600,
+  "block_size": 20,
+  "seed": 20260623,
+  "tok_mode": "o200k_base",
+  "corpus_docs": 2123,
+  "system_sizes": {
+   "lng/i31": 249,
+   "lng/ioc": 226,
+   "trp/iata": 600,
+   "trp/icao": 600,
+   "fin/i42": 178,
+   "cls/elm": 118,
+   "cmp/sts": 64,
+   "bio/aa1": 20,
+   "bio/aa3": 20,
+   "com/mor": 48
+  },
+  "family": {
+   "A": 38,
+   "B": 13
+  }
+ },
+ "cells": [
+  {
+   "embedder": "minilm",
+   "granularity": "record",
+   "form": "raw",
+   "key": "bare",
+   "recall@1": 0.2941,
+   "recall@5": 0.5098,
+   "mrr": 0.3807,
+   "tokens_per_answer": 35.4,
+   "n_docs": 2123
+  },
+  {
+   "embedder": "minilm",
+   "granularity": "block",
+   "form": "raw",
+   "key": "bare",
+   "recall@1": 0.1569,
+   "recall@5": 0.451,
+   "mrr": 0.2725,
+   "tokens_per_answer": 741.9,
+   "n_docs": 109
+  },
+  {
+   "embedder": "minilm",
+   "granularity": "file",
+   "form": "raw",
+   "key": "bare",
+   "recall@1": 0.6078,
+   "recall@5": 1.0,
+   "mrr": 0.7712,
+   "tokens_per_answer": 8659.0,
+   "n_docs": 10
+  },
+  {
+   "embedder": "minilm",
+   "granularity": "record",
+   "form": "raw",
+   "key": "ns",
+   "recall@1": 0.3922,
+   "recall@5": 0.4902,
+   "mrr": 0.433,
+   "tokens_per_answer": 39.9,
+   "n_docs": 2123
+  },
+  {
+   "embedder": "minilm",
+   "granularity": "block",
+   "form": "raw",
+   "key": "ns",
+   "recall@1": 0.1176,
+   "recall@5": 0.451,
+   "mrr": 0.2654,
+   "tokens_per_answer": 831.7,
+   "n_docs": 109
+  },
+  {
+   "embedder": "minilm",
+   "granularity": "file",
+   "form": "raw",
+   "key": "ns",
+   "recall@1": 0.6078,
+   "recall@5": 1.0,
+   "mrr": 0.7732,
+   "tokens_per_answer": 9868.2,
+   "n_docs": 10
+  },
+  {
+   "embedder": "minilm",
+   "granularity": "record",
+   "form": "verb",
+   "key": "bare",
+   "recall@1": 0.5294,
+   "recall@5": 0.6667,
+   "mrr": 0.5915,
+   "tokens_per_answer": 22.6,
+   "n_docs": 2123
+  },
+  {
+   "embedder": "minilm",
+   "granularity": "block",
+   "form": "verb",
+   "key": "bare",
+   "recall@1": 0.2941,
+   "recall@5": 0.6078,
+   "mrr": 0.4163,
+   "tokens_per_answer": 459.8,
+   "n_docs": 109
+  },
+  {
+   "embedder": "minilm",
+   "granularity": "file",
+   "form": "verb",
+   "key": "bare",
+   "recall@1": 0.8235,
+   "recall@5": 1.0,
+   "mrr": 0.9036,
+   "tokens_per_answer": 6257.9,
+   "n_docs": 10
+  },
+  {
+   "embedder": "minilm",
+   "granularity": "record",
+   "form": "verb",
+   "key": "ns",
+   "recall@1": 0.5294,
+   "recall@5": 0.6667,
+   "mrr": 0.5922,
+   "tokens_per_answer": 27.0,
+   "n_docs": 2123
+  },
+  {
+   "embedder": "minilm",
+   "granularity": "block",
+   "form": "verb",
+   "key": "ns",
+   "recall@1": 0.2745,
+   "recall@5": 0.5686,
+   "mrr": 0.3837,
+   "tokens_per_answer": 549.6,
+   "n_docs": 109
+  },
+  {
+   "embedder": "minilm",
+   "granularity": "file",
+   "form": "verb",
+   "key": "ns",
+   "recall@1": 0.8235,
+   "recall@5": 0.9804,
+   "mrr": 0.8987,
+   "tokens_per_answer": 7467.1,
+   "n_docs": 10
+  },
+  {
+   "embedder": "e5",
+   "granularity": "record",
+   "form": "raw",
+   "key": "bare",
+   "recall@1": 0.6078,
+   "recall@5": 0.8235,
+   "mrr": 0.7059,
+   "tokens_per_answer": 35.4,
+   "n_docs": 2123
+  },
+  {
+   "embedder": "e5",
+   "granularity": "block",
+   "form": "raw",
+   "key": "bare",
+   "recall@1": 0.2157,
+   "recall@5": 0.5882,
+   "mrr": 0.3559,
+   "tokens_per_answer": 741.9,
+   "n_docs": 109
+  },
+  {
+   "embedder": "e5",
+   "granularity": "file",
+   "form": "raw",
+   "key": "bare",
+   "recall@1": 0.5294,
+   "recall@5": 0.902,
+   "mrr": 0.6673,
+   "tokens_per_answer": 8659.0,
+   "n_docs": 10
+  },
+  {
+   "embedder": "e5",
+   "granularity": "record",
+   "form": "raw",
+   "key": "ns",
+   "recall@1": 0.7255,
+   "recall@5": 0.9412,
+   "mrr": 0.8003,
+   "tokens_per_answer": 39.9,
+   "n_docs": 2123
+  },
+  {
+   "embedder": "e5",
+   "granularity": "block",
+   "form": "raw",
+   "key": "ns",
+   "recall@1": 0.3137,
+   "recall@5": 0.6078,
+   "mrr": 0.4173,
+   "tokens_per_answer": 831.7,
+   "n_docs": 109
+  },
+  {
+   "embedder": "e5",
+   "granularity": "file",
+   "form": "raw",
+   "key": "ns",
+   "recall@1": 0.6471,
+   "recall@5": 1.0,
+   "mrr": 0.8023,
+   "tokens_per_answer": 9868.2,
+   "n_docs": 10
+  },
+  {
+   "embedder": "e5",
+   "granularity": "record",
+   "form": "verb",
+   "key": "bare",
+   "recall@1": 0.9216,
+   "recall@5": 1.0,
+   "mrr": 0.9608,
+   "tokens_per_answer": 22.6,
+   "n_docs": 2123
+  },
+  {
+   "embedder": "e5",
+   "granularity": "block",
+   "form": "verb",
+   "key": "bare",
+   "recall@1": 0.4706,
+   "recall@5": 0.8039,
+   "mrr": 0.5971,
+   "tokens_per_answer": 459.8,
+   "n_docs": 109
+  },
+  {
+   "embedder": "e5",
+   "granularity": "file",
+   "form": "verb",
+   "key": "bare",
+   "recall@1": 0.8431,
+   "recall@5": 1.0,
+   "mrr": 0.9183,
+   "tokens_per_answer": 6257.9,
+   "n_docs": 10
+  },
+  {
+   "embedder": "e5",
+   "granularity": "record",
+   "form": "verb",
+   "key": "ns",
+   "recall@1": 0.8824,
+   "recall@5": 1.0,
+   "mrr": 0.9363,
+   "tokens_per_answer": 27.0,
+   "n_docs": 2123
+  },
+  {
+   "embedder": "e5",
+   "granularity": "block",
+   "form": "verb",
+   "key": "ns",
+   "recall@1": 0.4706,
+   "recall@5": 0.7255,
+   "mrr": 0.5529,
+   "tokens_per_answer": 549.6,
+   "n_docs": 109
+  },
+  {
+   "embedder": "e5",
+   "granularity": "file",
+   "form": "verb",
+   "key": "ns",
+   "recall@1": 0.902,
+   "recall@5": 1.0,
+   "mrr": 0.9477,
+   "tokens_per_answer": 7467.1,
+   "n_docs": 10
+  }
+ ]
+}

@@ -1,0 +1,252 @@
+{
+ "results": [
+  {
+   "id": "H1",
+   "statement": "no cluster geo-economico o comprimento modal de codigo e 2 ou 3",
+   "matcher": "length",
+   "predicate": {
+    "metric": "mode_len",
+    "op": "<=",
+    "value": 3
+   },
+   "evidence": {
+    "mode_len": 3,
+    "mean_len": 3,
+    "share_2_3": 1.0,
+    "hist": {
+     "3": 653
+    }
+   },
+   "verdict": "supported"
+  },
+  {
+   "id": "H2",
+   "statement": "simbolos de elemento descartam vogais (abjad): razao < baseline ingles 0.38",
+   "matcher": "vowel",
+   "predicate": {
+    "metric": "vowel_ratio",
+    "op": "<",
+    "value": 0.38
+   },
+   "evidence": {
+    "vowel_ratio": 0.2342,
+    "n_letters": 222,
+    "english_baseline": 0.38
+   },
+   "verdict": "supported"
+  },
+  {
+   "id": "H3",
+   "statement": "no espaco de 3 letras, codigos IATA colidem com outros sistemas em massa",
+   "matcher": "collision",
+   "predicate": {
+    "metric": "n_collided",
+    "op": ">=",
+    "value": 100
+   },
+   "evidence": {
+    "n_codes": 9056,
+    "n_collided": 416,
+    "frac_collided": 0.0459,
+    "examples": [
+     "AFN",
+     "AGO",
+     "AHO",
+     "AIA",
+     "ALA",
+     "ALB",
+     "ALG",
+     "AMD"
+    ]
+   },
+   "verdict": "supported"
+  },
+  {
+   "id": "H4",
+   "statement": "todo pais de aeroporto (extra.country) resolve em ISO 3166 alpha-2",
+   "matcher": "join",
+   "predicate": {
+    "metric": "coverage",
+    "op": ">=",
+    "value": 0.99
+   },
+   "evidence": {
+    "coverage": 0.9999,
+    "n_keys": 9056,
+    "ref_size": 249
+   },
+   "verdict": "supported"
+  },
+  {
+   "id": "HP1a",
+   "statement": "o cluster geo-economico e de transporte (i31, ioc, i42, iata, icao) escreve codigos integralmente em CAIXA ALTA: frac_upper == 1.0",
+   "matcher": "case",
+   "predicate": {
+    "metric": "frac_upper",
+    "op": "==",
+    "value": 1.0
+   },
+   "evidence": {
+    "frac_upper": 1.0,
+    "frac_lower": 0.0,
+    "frac_title": 0.0
+   },
+   "verdict": "supported"
+  },
+  {
+   "id": "HP1b",
+   "statement": "simbolos de elemento quimico nao seguem caixa-alta de pais; sao Title-case: frac_title == 1.0",
+   "matcher": "case",
+   "predicate": {
+    "metric": "frac_title",
+    "op": "==",
+    "value": 1.0
+   },
+   "evidence": {
+    "frac_upper": 0.1186,
+    "frac_lower": 0.0,
+    "frac_title": 1.0
+   },
+   "verdict": "supported"
+  },
+  {
+   "id": "HP2a",
+   "statement": "o cluster de aeroportos (iata+icao) aplica descarte de vogal abjad mais forte que o ingles: vowel_ratio < 0.21",
+   "matcher": "vowel",
+   "predicate": {
+    "metric": "vowel_ratio",
+    "op": "<",
+    "value": 0.21
+   },
+   "evidence": {
+    "vowel_ratio": 0.2042,
+    "n_letters": 67780,
+    "english_baseline": 0.38
+   },
+   "verdict": "supported"
+  },
+  {
+   "id": "HP2b",
+   "statement": "o cluster aminoacido+elemento (aa3+elm) preserva mais vogais que o cluster de aeroportos: vowel_ratio >= 0.22",
+   "matcher": "vowel",
+   "predicate": {
+    "metric": "vowel_ratio",
+    "op": ">=",
+    "value": 0.22
+   },
+   "evidence": {
+    "vowel_ratio": 0.2411,
+    "n_letters": 282,
+    "english_baseline": 0.38
+   },
+   "verdict": "supported"
+  },
+  {
+   "id": "HP3a",
+   "statement": "codigos ICAO tem formato fixo de exatamente 4 letras maiusculas [A-Z]{4}: match_rate == 1.0",
+   "matcher": "regex",
+   "predicate": {
+    "metric": "match_rate",
+    "op": "==",
+    "value": 1.0
+   },
+   "evidence": {
+    "pattern": "[A-Z]{4}",
+    "match_rate": 1.0,
+    "n": 10153
+   },
+   "verdict": "supported"
+  },
+  {
+   "id": "HP3b",
+   "statement": "codigos de status HTTP sao puramente numericos de 3 digitos em todas as entradas: match_rate == 1.0",
+   "matcher": "regex",
+   "predicate": {
+    "metric": "match_rate",
+    "op": "==",
+    "value": 1.0
+   },
+   "evidence": {
+    "pattern": "\\d{3}",
+    "match_rate": 1.0,
+    "n": 64
+   },
+   "verdict": "supported"
+  },
+  {
+   "id": "HP4a",
+   "statement": "bio/aa1 (aminoacido 1-letra) e o sistema mais colidente por fracao: frac_collided >= 0.90",
+   "matcher": "collision",
+   "predicate": {
+    "metric": "frac_collided",
+    "op": ">=",
+    "value": 0.9
+   },
+   "evidence": {
+    "n_codes": 20,
+    "n_collided": 20,
+    "frac_collided": 1.0,
+    "examples": [
+     "A",
+     "C",
+     "D",
+     "E",
+     "F",
+     "G",
+     "H",
+     "I"
+    ]
+   },
+   "verdict": "supported"
+  },
+  {
+   "id": "HP4b",
+   "statement": "trp/icao (ICAO 4 letras) e morfologicamente isolado: n_collided == 0",
+   "matcher": "collision",
+   "predicate": {
+    "metric": "n_collided",
+    "op": "==",
+    "value": 0
+   },
+   "evidence": {
+    "n_codes": 10153,
+    "n_collided": 0,
+    "frac_collided": 0.0,
+    "examples": []
+   },
+   "verdict": "supported"
+  },
+  {
+   "id": "HP5a",
+   "statement": "todo pais do hub IOC carrega ISO alpha-3 (extra.iso3) que resolve em ISO 3166 (code): coverage >= 0.99",
+   "matcher": "join",
+   "predicate": {
+    "metric": "coverage",
+    "op": ">=",
+    "value": 0.99
+   },
+   "evidence": {
+    "coverage": 1.0,
+    "n_keys": 226,
+    "ref_size": 249
+   },
+   "verdict": "supported"
+  },
+  {
+   "id": "HP5b",
+   "statement": "todo aeroporto ICAO tem extra.country (alpha-2) que resolve em ISO 3166: coverage >= 0.99",
+   "matcher": "join",
+   "predicate": {
+    "metric": "coverage",
+    "op": ">=",
+    "value": 0.99
+   },
+   "evidence": {
+    "coverage": 0.9998,
+    "n_keys": 10153,
+    "ref_size": 249
+   },
+   "verdict": "supported"
+  }
+ ]
+}

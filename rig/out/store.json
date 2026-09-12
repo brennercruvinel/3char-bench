@@ -1,0 +1,42 @@
+{
+ "_meta": {
+  "tok_mode": "o200k_base",
+  "cap_per_system": 600
+ },
+ "data_layer": {
+  "n_records": 2123,
+  "raw_bytes": 226387,
+  "jsonl_bytes": 348932,
+  "raw_gzip_bytes": 45722,
+  "jsonl_gzip_bytes": 49273,
+  "raw_gzip_ratio": 5.0,
+  "jsonl_gzip_ratio": 7.1,
+  "mean_tokens_per_record_chunk": 28.3,
+  "bytes_per_record_jsonl_gzip": 23.2
+ },
+ "vector_layer": {
+  "flat_fp32": {
+   "bytes": 3260973,
+   "recall@1": 0.8824,
+   "recall@5": 1.0,
+   "x_smaller_than_flat": 1.0,
+   "bytes_per_vector": 1536.0
+  },
+  "scalar_q8": {
+   "bytes": 818385,
+   "recall@1": 0.8824,
+   "recall@5": 1.0,
+   "x_smaller_than_flat": 4.0,
+   "bytes_per_vector": 385.5
+  },
+  "pq_m48": {
+   "bytes": 495206,
+   "recall@1": 0.6078,
+   "recall@5": 0.9216,
+   "x_smaller_than_flat": 6.6,
+   "bytes_per_vector": 233.3
+  },
+  "_n_vectors": 2123,
+  "_dim": 384
+ }
+}

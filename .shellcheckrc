@@ -1,0 +1,3 @@
+# lint base de shell. ver https://www.shellcheck.net
+# SC1090/SC1091: source de caminho dinamico (ativacao de venv), nao seguivel estaticamente
+disable=SC1090,SC1091
