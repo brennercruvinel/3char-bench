@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
 """
-universal.py  -  experimento 3: convergencia e universalidade.
+universal.py  -  experiment 3: convergence and universality.
 
-a pergunta: existe um codigo/termo UNIVERSAL que atravesse todos os dominios? e
-se nao, qual e o verdadeiro eixo de uniao?
+the question: is there a UNIVERSAL code/term that crosses every domain? and if not, what is the
+real join axis?
 
-tres medidas:
-1. sobreposicao de termos entre os conjuntos de codigo primario de cada par de
-   sistemas (containment e Jaccard). mostra que entre dominios a sobreposicao de
-   codigo e ~0: 'tabela de 3 chars' e um recorte morfologico, nao semantico.
-2. o literal mais 'universal' = o reivindicado por mais sistemas (do teste de
-   colisao). nenhum atravessa todos os dominios.
-3. o eixo de juncao por PAIS (ISO 3166): para cada sistema que carrega uma chave
-   de pais, qual a cobertura contra a referencia ISO. sistemas com cobertura alta
-   formam UM componente conexo; os demais ficam ilhados. -> a universalidade nao
-   esta no codigo, esta na chave de juncao, e so para um sub-cluster.
+three measures:
+1. term overlap between the primary code sets of each pair of systems (containment and Jaccard).
+   shows that across domains code overlap is ~0: 'a table of 3 chars' is a morphological cut, not
+   a semantic one.
+2. the most 'universal' literal = the one claimed by the most systems (from the collision test).
+   none crosses every domain.
+3. the join axis by COUNTRY (ISO 3166): for each system that carries a country key, its coverage
+   against the ISO reference. systems with high coverage form ONE connected component; the rest
+   are islands. -> universality is not in the code, it is in the join key, and only for a
+   sub-cluster.
 
-escreve out/universal.json.
+writes out/universal.json.
 """
 import pathlib
 import sys
@@ -34,8 +34,8 @@ import catalog
 import jio
 
 
-# como extrair a chave-pais (alpha-2 uppercase) de cada sistema que a tem.
-# os demais sistemas nao tem referente de pais: ficam fora do grafo de juncao.
+# how to extract the country key (alpha-2 uppercase) from each system that has one.
+# the other systems have no country referent: they stay out of the join graph.
 def _norm(name):
     return name.upper().replace("(THE)", "").strip()
 
@@ -47,12 +47,12 @@ def _country_keys(corpus, name_to_a2):
         for r in rs:
             a2s = []
             if node == "lng/i31":
-                a2s = r.aliases[:1]                       # alpha-2 vive em aliases
+                a2s = r.aliases[:1]                       # alpha-2 lives in aliases
             elif node == "lng/ioc":
                 a2s = [r.f("iso2")]
             elif node in ("trp/iata", "trp/icao"):
                 a2s = [r.f("country")]
-            elif node == "fin/i42":                       # moeda lista nomes de pais
+            elif node == "fin/i42":                       # currency lists country names
                 a2s = [name_to_a2.get(_norm(n)) for n in r.f("countries").split(", ")]
             vals |= {a.upper() for a in a2s if a and len(a) == 2}
         if vals:
@@ -63,12 +63,12 @@ def _country_keys(corpus, name_to_a2):
 def run():
     corpus = catalog.load_all()
 
-    # referencia ISO 3166
+    # ISO 3166 reference
     i31 = corpus["lng/i31"]
     iso_a2 = {r.aliases[0].upper() for r in i31 if r.aliases}
     name_to_a2 = {_norm(r.label): r.aliases[0].upper() for r in i31 if r.aliases}
 
-    # ---- 1. sobreposicao de termos (codigo primario) entre pares ----
+    # ---- 1. term overlap (primary code) between pairs ----
     sets = {n: {r.code.upper() for r in rs} for n, rs in corpus.items()}
     overlaps = []
     for a, b in itertools.combinations(sorted(sets), 2):
@@ -82,7 +82,7 @@ def run():
             "jaccard": round(inter / len(A | B), 4)})
     overlaps.sort(key=lambda d: -d["containment"])
 
-    # ---- 2. literal mais universal ----
+    # ---- 2. most universal literal ----
     claim = collections.defaultdict(set)
     for n, S in sets.items():
         for lit in S:
@@ -90,13 +90,13 @@ def run():
     top_lit = sorted(((lit, sorted(s)) for lit, s in claim.items() if len(s) >= 2),
                      key=lambda kv: -len(kv[1]))[:10]
     domains = {n.split("/")[0] for n in sets}
-    # nenhum literal atravessa todos os dominios:
+    # no literal crosses every domain:
     max_domain_span = max((len({s.split('/')[0] for s in syss}) for _, syss in top_lit), default=0)
 
-    # ---- 3. eixo de juncao por pais ----
+    # ---- 3. join axis by country ----
     ckeys = _country_keys(corpus, name_to_a2)
     coverage = {n: round(len(v & iso_a2) / len(v), 4) for n, v in ckeys.items()}
-    # grafo: aresta entre sistemas que partilham a chave-pais com cobertura alta
+    # graph: edge between systems that share the country key with high coverage
     joinable = [n for n, c in coverage.items() if c >= 0.8]
     isolated = [n for n in sets if n not in ckeys]
 

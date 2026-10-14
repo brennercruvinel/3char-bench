@@ -1,21 +1,22 @@
 #!/usr/bin/env python3
 """
-hypo.py  -  motor de hipoteses reutilizavel + biblioteca de pattern matchers.
+hypo.py  -  reusable check engine + library of pattern matchers.
 
-uma hipotese e DADO, nao codigo: vive em rig/hypotheses.json como
+a check is DATA, not code: it lives in rig/hypotheses.json as
   {id, statement, matcher, params, predicate}
-o motor roda o matcher sobre o corpus, extrai evidencia numerica e aplica o
-predicado para emitir um veredito (supported|refuted). adicionar hipotese =
-adicionar uma entrada e rerodar; nenhum numero embutido, nenhum erro engolido.
+the engine runs the matcher over the corpus, extracts numeric evidence and applies the predicate
+to emit a verdict (supported|refuted). adding a check = adding an entry and rerunning; no number
+embedded in code, no error swallowed. these are threshold checks that describe the corpus, not
+hypotheses about a model.
 
-matchers (todos os tipos de pattern matching pedidos):
-  length     distribuicao e moda do comprimento dos codigos
-  charset    composicao: alpha / digito / alfanumerico / simbolo
-  case       caixa: upper / lower / title / mixed
-  vowel      razao de vogais (principio abjad)
-  regex      taxa de match de um regex
-  collision  fracao dos codigos reivindicada por outros sistemas
-  join       cobertura de uma chave contra um sistema de referencia
+matchers:
+  length     distribution and mode of code length
+  charset    composition: alpha / digit / alphanumeric / symbol
+  case       case: upper / lower / title / mixed
+  vowel      vowel ratio (abjad principle)
+  regex      match rate of a regex
+  collision  fraction of the codes claimed by other systems
+  join       coverage of a key against a reference system
 """
 import pathlib
 import sys
@@ -33,8 +34,8 @@ import statistics as st
 import catalog
 import jio
 
-# ---------------- biblioteca de matchers ----------------
-# cada matcher: (corpus, params) -> dict de evidencia (numeros prontos p/ predicado)
+# ---------------- matcher library ----------------
+# each matcher: (corpus, params) -> evidence dict (numbers ready for the predicate)
 
 def _recs(corpus, params):
     sysids = params.get("systems") or list(corpus)
@@ -106,11 +107,11 @@ def m_collision(corpus, params):
 
 
 def m_join(corpus, params):
-    ref_field = params["ref_field"]          # campo no sistema de referencia
+    ref_field = params["ref_field"]          # field in the reference system
     ref_sys = params["ref_system"]
-    key_field = params["key_field"]          # campo no sistema testado
+    key_field = params["key_field"]          # field in the tested system
     test_sys = params["test_system"]
-    def pick(r, field):                        # 'code' | 'alias' | chave de fields
+    def pick(r, field):                        # 'code' | 'alias' | key of fields
         if field == "code":
             return [r.code]
         if field == "alias":
@@ -135,15 +136,15 @@ def evaluate(hyp, corpus):
     ev = matcher(corpus, hyp.get("params", {}))
     p = hyp["predicate"]                      # {metric, op, value}
     val = ev.get(p["metric"])
-    verdict = "indeterminado" if val is None else (
+    verdict = "undetermined" if val is None else (
         "supported" if OPS[p["op"]](val, p["value"]) else "refuted")
     return {"id": hyp["id"], "statement": hyp["statement"], "matcher": hyp["matcher"],
             "predicate": p, "evidence": ev, "verdict": verdict}
 
 
-# hipoteses-semente: data-driven, substituem o estofo retorico por testes que
-# sustentam uma decisao. novas hipoteses (humanas ou geradas) sao anexadas ao
-# mesmo arquivo e re-testadas sem tocar no codigo.
+# seed checks: data-driven, they replace rhetorical padding with tests that
+# support a decision. new checks (human or generated) are appended to the
+# same file and re-tested without touching the code.
 SEED = [
     {"id": "H1", "statement": "no cluster geo-economico o comprimento modal de codigo e 2 ou 3",
      "matcher": "length", "params": {"systems": ["lng/i31", "lng/ioc", "fin/i42"]},

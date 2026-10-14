@@ -1,24 +1,23 @@
 #!/usr/bin/env python3
 """
-corpus.py  -  primitivas de corpus e recuperacao compartilhadas.
+corpus.py  -  shared corpus and retrieval primitives.
 
-extraidas de grid para que grid, store e decomp reusem sem depender uns dos
-outros (cada experimento vira folha; o que e comum mora aqui). responsabilidade
-unica: montar o corpus amostrado, renderizar chunks nas tres granularidades, e
-rodar a busca faiss.
+extracted from grid so that grid, store and decomp reuse them without depending on each other
+(each experiment is a leaf; what is common lives here). single responsibility: build the sampled
+corpus, render chunks at the three granularities, and run the faiss search.
 
-  build_corpus(questions)         corpus amostrado, alvos do gabarito sempre dentro
-  render_records/blocks/files     chunks por granularidade (form x key aplicados)
-  search(doc_vecs, q_vecs, k)     faiss IndexFlatIP, retorna a ordem top-k
-  rank_of / metrics               posicao do alvo e recall@1/@5/mrr
+  build_corpus(questions)         sampled corpus, answer-key targets always included
+  render_records/blocks/files     chunks per granularity (form x key applied)
+  search(doc_vecs, q_vecs, k)     faiss IndexFlatIP, returns the top-k order
+  rank_of / metrics               rank of the target and recall@1/@5/mrr
 """
 import random
 
 import catalog
 import faiss
 
-CAP = 600          # teto por sistema (alvos do gabarito sempre incluidos)
-BLOCK = 20         # registros por bloco na granularidade 'block'
+CAP = 600          # cap per system (answer-key targets always included)
+BLOCK = 20         # records per block at the 'block' granularity
 SEED = 20260623
 
 
@@ -33,13 +32,13 @@ def build_corpus(questions):
         if len(rest) > CAP - len(gt):
             rest = rng.sample(rest, max(0, CAP - len(gt)))
         sel = gt + rest
-        sel.sort(key=lambda r: r.code)          # ordem deterministica p/ blocos
+        sel.sort(key=lambda r: r.code)          # deterministic order for blocks
         out[node] = sel
     return out
 
 
 def render_records(corpus, form, key):
-    """-> (texts, ids) por registro. id = (system, code)."""
+    """-> (texts, ids) per record. id = (system, code)."""
     texts, ids = [], []
     ns = (key == "ns")
     for node, rs in corpus.items():
@@ -51,7 +50,7 @@ def render_records(corpus, form, key):
 
 
 def render_blocks(corpus, form, key):
-    """-> (texts, owners) onde owners[i] = set de ids no bloco i."""
+    """-> (texts, owners) where owners[i] = set of ids in block i."""
     texts, owners = [], []
     ns = (key == "ns")
     for node, rs in corpus.items():
@@ -64,7 +63,7 @@ def render_blocks(corpus, form, key):
 
 
 def render_files(corpus, form, key):
-    """-> (texts, owners) um chunk por sistema (arquivo inteiro)."""
+    """-> (texts, owners) one chunk per system (whole file)."""
     texts, owners = [], []
     ns = (key == "ns")
     for node, rs in corpus.items():

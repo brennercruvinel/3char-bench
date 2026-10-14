@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """
-tok.py  -  contagem de tokens.
+tok.py  -  token counting.
 
-usa o tokenizador o200k (a familia gpt-4o/o200k_base) quando disponivel. se nao
-estiver, NAO inventa um numero plausivel em silencio: degrada para uma estimativa
-declarada (~4 chars/token) e expoe qual modo esta ativo via tok.MODE, para que o
-relatorio possa dizer a verdade sobre como o custo foi medido.
+uses the o200k tokenizer (the gpt-4o / o200k_base family) when available. if it is not, it does
+NOT invent a plausible number silently: it degrades to a declared estimate (~4 chars/token) and
+exposes the active mode through tok.MODE, so the report can say how the cost was measured.
 """
 try:
     import tiktoken
@@ -14,8 +13,8 @@ try:
 
     def count(s):
         return len(_ENC.encode(s or ""))
-except Exception:                                   # tiktoken ausente ou offline
-    MODE = "estimado(~4ch/tok)"
+except Exception:                                   # tiktoken missing or offline
+    MODE = "estimated(~4ch/tok)"
 
     def count(s):
         return max(1, len(s or "") // 4)

@@ -1,19 +1,18 @@
 #!/usr/bin/env python3
 """
-decomp.py  -  decompoe o efeito de 'verbalizar' (responde a critica adversarial C1).
+decomp.py  -  decomposes the effect of 'verbalizing' (answers the adversarial critique C1).
 
-a forma 'raw' despeja TODAS as colunas mantidas; a 'verb' e prosa sobre um
-subconjunto curado. logo raw->verb mistura duas mudancas: (a) trocar k=v por prosa
-e (b) descartar campos-ruido. para nao vender uma pela outra, mede-se uma terceira
-forma intermediaria:
+the 'raw' form dumps ALL kept columns; 'verb' is prose over a curated subset. so raw->verb mixes
+two changes: (a) replacing k=v with prose and (b) dropping noise fields. to avoid selling one as
+the other, a third intermediate form is measured:
 
-  raw_all      k=v de todas as colunas mantidas            (forma 'raw' da grade)
-  raw_curated  k=v apenas das colunas que a prosa cita     (isola descarte de campo)
-  verb         prosa sobre as mesmas colunas curadas       (isola a prosa)
+  raw_all      k=v of every kept column                  (the grid's 'raw' form)
+  raw_curated  k=v of only the columns the prose cites   (isolates the field drop)
+  verb         prose over the same curated columns       (isolates the prose)
 
-efeito de descartar campo  = raw_all  -> raw_curated
-efeito da prosa            = raw_curated -> verb
-fixo em e5/record/bare (sem o confundidor do namespace). escreve out/decomp.json.
+effect of dropping fields  = raw_all  -> raw_curated
+effect of prose            = raw_curated -> verb
+fixed at e5/record/bare (without the namespace confounder). writes out/decomp.json.
 """
 import pathlib
 import sys
@@ -32,8 +31,8 @@ import qa
 import tok
 from corpus import build_corpus
 
-# colunas que cada template de prosa de fato cita (subconjunto das 'keep').
-# se um sistema nao tem coluna-ruido, raw_curated == raw_all (efeito nulo, honesto).
+# columns each prose template actually cites (subset of 'keep').
+# if a system has no noise column, raw_curated == raw_all (null effect, honest).
 VF = {
     "lng/i31": ["aliases", "numeric"],                   # dropa region, sub_region
     "lng/ioc": ["aliases", "iso2", "tld", "capital"],    # dropa continent

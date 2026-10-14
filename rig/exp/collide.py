@@ -1,23 +1,22 @@
 #!/usr/bin/env python3
 """
-collide.py  -  experimento 2: desambiguacao de colisao (o teste mais interessante).
+collide.py  -  experiment 2: collision disambiguation.
 
-"GRU", "BR", "FRA", "S" sao reivindicados por varios sistemas. duas medidas:
+"GRU", "BR", "FRA", "S" are claimed by several systems. two measures:
 
-1. custo combinatorio da ambiguidade. quantos literais colidem, por quantos
-   sistemas, e a taxa esperada de erro de roteamento para uma consulta crua sem
-   contexto = media de (1 - 1/k). isto e o custo de NAO namespacear, em numero.
+1. combinatorial cost of the ambiguity. how many literals collide, across how many systems, and
+   the expected routing error rate for a bare query without context = mean of (1 - 1/k). this is
+   the cost of NOT namespacing, as a number.
 
-2. roteamento medido por recuperacao. para cada par (literal, sistema-pretendido),
-   tres condicoes:
-     bare    doc = codigo nu;          query = codigo nu (sem contexto)
-     intent  doc = registro verbalizado; query = frase de intencao + codigo
-     ns      doc = 'sysid:codigo';      query = 'sysid:codigo'
-   acuracia = top-1 cai no sistema pretendido. quantifica quanto namespace/intencao
-   recuperam a precisao que a string crua perde.
+2. routing measured by retrieval. for each pair (literal, intended system), three conditions:
+     bare    doc = bare code;              query = bare code (no context)
+     intent  doc = verbalized record;      query = intent phrase + code
+     ns      doc = 'sysid:code';           query = 'sysid:code'
+   accuracy = top-1 falls in the intended system. quantifies how much namespace/intent recover
+   the precision the raw string loses.
 
-comparacao case-insensitive (quem digita 'br' ou 'BR' quer a mesma coisa).
-escreve out/collide.json.
+case-insensitive comparison (whoever types 'br' or 'BR' wants the same thing).
+writes out/collide.json.
 """
 import pathlib
 import sys
@@ -36,7 +35,7 @@ import faiss
 import jio
 import numpy as np
 
-# frase de intencao por sistema (o usuario sabe que dominio quer)
+# intent phrase per system (the user knows which domain they want)
 INTENT = {
     "trp/iata": "codigo IATA de aeroporto",
     "trp/icao": "codigo ICAO de aeroporto",
@@ -64,9 +63,9 @@ def collisions(corpus):
 
 
 def dataset_collisions():
-    """o mesmo censo sobre TODOS os sistemas publicados no hub, so a coluna code.
+    """the same census over ALL systems published on the hub, code column only.
     e uma propriedade do dataset, nao do corpus curado: quem carrega o config 'all'
-    encontra exatamente estes literais reivindicados por mais de um sistema."""
+    finds exactly these literals claimed by more than one system."""
     claim = collections.defaultdict(set)
     for sid in catalog.published():
         for c in set(catalog.codes(sid)):
@@ -86,22 +85,22 @@ def run():
     corpus = catalog.load_all()
     coll, rec_by = collisions(corpus)
 
-    # ---- 1. custo combinatorio ----
+    # ---- 1. combinatorial cost ----
     ks = [len(s) for s in coll.values()]
     hist = dict(sorted(collections.Counter(ks).items()))
     amb_cost = float(np.mean([1 - 1 / k for k in ks])) if ks else 0.0
     worst = sorted(coll.items(), key=lambda kv: -len(kv[1]))[:15]
 
-    # ---- 2. roteamento medido ----
-    # pares (literal, sistema) limitados aos literais mais ambiguos para um teste denso
+    # ---- 2. measured routing ----
+    # (literal, system) pairs limited to the most ambiguous literals for a dense test
     sample_lits = [lit for lit, _ in sorted(coll.items(), key=lambda kv: -len(kv[1]))[:60]]
     pairs = [(lit, s) for lit in sample_lits for s in coll[lit]]
-    # teto de empate aleatorio: uma consulta crua sem contexto nao distingue os k
-    # reivindicantes; o melhor que se pode esperar e 1/k. se acc_bare ~ este teto, a
-    # condicao bare nao mede semantica, mede o piso combinatorio (caveat honesto).
+    # random-tie ceiling: a raw query without context cannot tell the k claimants
+    # apart; the best one can expect is 1/k. if acc_bare ~ this ceiling, the bare
+    # condition measures the combinatorial floor, not semantics (honest caveat).
     tie_ceiling = float(np.mean([1.0 / len(coll[lit]) for lit, _ in pairs]))
 
-    # index unico com todos os registros, em tres renderizacoes
+    # single index with every record, in three renderings
     all_recs = [(node, r) for node, rs in corpus.items() for r in rs]
     bare_docs = [r.code for _, r in all_recs]
     ns_docs = [f"{node.split('/')[1]}:{r.code}" for node, r in all_recs]

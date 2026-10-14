@@ -1,5 +1,5 @@
-# rig de retrieval do 3char - dependencias travadas para reprodutibilidade
-# alvo: python 3.11 (onnxruntime/faiss tem wheels arm64; 3.14 ainda nao)
+# retrieval rig for 3char - pinned dependencies for reproducibility
+# target: python 3.11 (onnxruntime/faiss have arm64 wheels; 3.14 not yet)
 numpy>=1.26,<2.3
 pyarrow>=16
 onnxruntime>=1.17

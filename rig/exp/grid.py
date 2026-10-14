@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """
-grid.py  -  experimento 1: a grade controlada.
+grid.py  -  experiment 1: the controlled grid.
 
-um recuperador fixo (faiss IndexFlatIP sobre vetores normalizados = cosseno),
-variando UMA dimensao por vez:
+one fixed retriever (faiss IndexFlatIP over normalized vectors = cosine), varying ONE dimension
+at a time:
 
-  granularidade  record | block(B=20) | file
-  forma          raw (linha CSV) | verb (prosa)
-  chave          bare ('GRU') | ns ('iata:GRU')
-  embedder       minilm | e5
+  granularity  record | block(B=20) | file
+  form         raw (CSV line) | verb (prose)
+  key          bare ('GRU') | ns ('iata:GRU')
+  embedder     minilm | e5
 
-corpus, render e busca vem de lib/corpus. mede, por celula: recall@1, recall@5,
-mrr e tokens_por_resposta (tiktoken o200k no chunk que carrega a resposta).
-escreve out/grid.json.
+corpus, rendering and search come from lib/corpus. measures per cell: recall@1, recall@5, mrr
+and tokens_per_answer (tiktoken o200k on the chunk that carries the answer).
+writes out/grid.json.
 """
 import pathlib
 import sys

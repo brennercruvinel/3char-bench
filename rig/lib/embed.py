@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 """
-embed.py  -  embedders intercambiaveis sobre onnxruntime (sem torch).
+embed.py  -  interchangeable embedders on onnxruntime (no torch).
 
-dois recuperadores fixos, ambos 384d, para que o veredito nao dependa de um unico
-modelo:
-  minilm  all-MiniLM-L6-v2        rapido, ingles-centrico
-  e5      multilingual-e5-small   multilingue (perguntas em pt), usa prefixos
-                                  'query:'/'passage:' como o modelo exige
+two fixed retrievers, both 384d, so that the verdict does not depend on a single model:
+  minilm  all-MiniLM-L6-v2        fast, english-centric
+  e5      multilingual-e5-small   multilingual (questions in portuguese), uses the
+                                  'query:'/'passage:' prefixes the model requires
 
-mean-pooling mascarado + normalizacao L2 (cosseno == produto interno). a unica
-diferenca de tratamento por modelo e o prefixo do e5, encapsulada aqui.
+masked mean pooling + L2 normalization (cosine == inner product). the only per-model difference
+in treatment is the e5 prefix, encapsulated here.
 """
 import conf
 import numpy as np

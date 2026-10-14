@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
-# bootstrap.sh - reproduz o ambiente do rig do zero, sem caminho de maquina embutido.
-# um comando, ambiente travado. dataset e embedders vem do hugging face hub na
-# primeira execucao (cache padrao do huggingface_hub), ou das variaveis CH3_*.
+# bootstrap.sh - rebuilds the rig environment from scratch, no machine path embedded.
+# one command, pinned environment. dataset and embedders come from the hugging face hub on
+# first run (default huggingface_hub cache), or from the CH3_* variables.
 set -euo pipefail
-cd "$(dirname "$0")/.."   # raiz do projeto
+cd "$(dirname "$0")/.."   # project root
 
-PY="${PY:-3.11}"          # onnxruntime/faiss tem wheels arm64 p/ 3.11; 3.14 ainda nao
+PY="${PY:-3.11}"          # onnxruntime/faiss have arm64 wheels for 3.11; 3.14 not yet
 
 echo "== venv (uv, python $PY) =="
 uv venv --python "$PY" .venv
 uv pip install --python .venv/bin/python -r requirements.txt
 
-echo "== smoke test (baixa dataset e embedders se ausentes) =="
+echo "== smoke test (downloads the dataset and embedders if missing) =="
 .venv/bin/python - <<'PY'
 import sys; sys.path.insert(0, "rig/lib")
 import catalog, conf, embed, qa, tok

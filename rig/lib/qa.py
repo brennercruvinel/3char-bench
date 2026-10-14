@@ -1,22 +1,21 @@
 #!/usr/bin/env python3
 """
-qa.py  -  51 perguntas de fato conhecido, gabarito verificado contra o dado.
+qa.py  -  51 questions of known fact, answer key verified against the data.
 
-duas familias:
-  A  fato single-system: a query descreve o registro pelo rotulo, a resposta e o
-     codigo. alvo de recuperacao = aquele registro. cobre todos os sistemas.
-  B  cross-tabela pelo hub de pais (IOC): a query da uma chave de juncao que NAO
-     e o codigo primario do registro (ISO alpha-3 ou alpha-2, que vivem em extra.iso3
-     e extra.iso2), e a resposta e outro campo do mesmo registro-hub
-     (TLD ou capital).
+two families:
+  A  single-system fact: the query describes the record by its label, the answer is the code.
+     retrieval target = that record. covers every system.
+  B  cross-table through the country hub (IOC): the query gives a join key that is NOT the
+     record's primary code (ISO alpha-3 or alpha-2, which live in extra.iso3 and extra.iso2),
+     and the answer is another field of the same hub record (TLD or capital).
 
-cada pergunta carrega (q, target_system, target_code, answer, family). a
-construcao FALHA em voz alta se um gabarito nao resolver no corpus - um item de
-gabarito que some seria um erro de medicao, nao um detalhe a engolir.
+each question carries (q, target_system, target_code, answer, family). construction FAILS loudly
+if an answer does not resolve in the corpus: an answer-key item that disappears would be a
+measurement error, not a detail to swallow.
 """
 import catalog
 
-# entidades escolhidas por serem inequivocas e de fato conhecido.
+# entities chosen for being unambiguous and of known fact.
 A_ITEMS = [
     ("trp/iata", "GRU", "Aeroporto Internacional de São Paulo-Guarulhos", "Qual o código IATA do {}?"),
     ("trp/iata", "CGH", "Aeroporto de São Paulo-Congonhas", "Qual o código IATA do {}?"),
@@ -58,7 +57,7 @@ A_ITEMS = [
     ("com/mor", "Q", "Q", "Qual o código Morse da letra '{}'?"),
 ]
 
-# familia B: (chave de juncao dada na query, tipo da chave, codigo IOC alvo, campo-resposta, texto)
+# family B: (join key given in the query, key type, target IOC code, answer field, text)
 B_ITEMS = [
     ("BRA", "alpha-3 ISO 3166", "BRA", "tld", "Qual o TLD do país cujo código alpha-3 é {}?"),
     ("DEU", "alpha-3 ISO 3166", "GER", "capital", "Qual a capital do país cujo código alpha-3 é {}?"),
@@ -81,7 +80,7 @@ def build():
     by = {n: {} for n in recs}
     for n, rs in recs.items():
         for r in rs:
-            by[n].setdefault(r.code, r)        # primeiro registro com cada codigo
+            by[n].setdefault(r.code, r)        # first record with each code
 
     qs, problems = [], []
 

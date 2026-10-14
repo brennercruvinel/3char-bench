@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-run.py  -  orquestrador. roda os experimentos na ordem e escreve os json.
+run.py  -  orchestrator. runs the experiments in order and writes the json files.
 
-  python rig/run.py            tudo
-  python rig/run.py grid       so a grade
+  python rig/run.py            everything
+  python rig/run.py grid       the grid only
   python rig/run.py collide universal store hypo
 
-cada etapa e independente e escreve seu json em out/. nenhuma monta prosa. falha em
-voz alta se um pre-requisito faltar, nada de excecao engolida virando 'resultado'.
+each step is independent and writes its json to out/. none of them writes prose. a missing
+prerequisite fails loudly; no exception is swallowed and turned into a "result".
 """
 import importlib
 import pathlib

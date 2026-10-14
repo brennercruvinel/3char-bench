@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
 """
-catalog.py  -  carrega o dataset publicado em REGISTROS uniformes.
+catalog.py  -  loads the published dataset as uniform RECORDS.
 
-le o parquet do 3char no schema canonico (system_id, code, label, description,
-parent_code, status, aliases, extra). a coluna-codigo nao e mais curada aqui: o
-pipeline do dataset ja decidiu o que e codigo em cada sistema e validou contra o
-regex do sistema. o que continua curado e a PROSA: um template por sistema, porque
-a qualidade da verbalizacao e justamente o que a grade mede.
+reads the 3char parquet in the canonical schema (system_id, code, label, description,
+parent_code, status, aliases, extra). the code column is no longer curated here: the dataset
+pipeline already decided what counts as a code in each system and validated it against the
+system's regex. what remains curated is the PROSE: one template per system, because the quality
+of the verbalization is exactly what the grid measures.
 
-cada registro:
+each record:
   system   'trp/iata'
   code     'GRU'
   label    'Sao Paulo/Guarulhos ... International Airport'
-  aliases  ['...'] outros literais do mesmo referente
-  fields   dict plano com label, description, aliases e as chaves de extra
+  aliases  ['...'] other literals of the same referent
+  fields   flat dict with label, description, aliases and the keys of extra
 
-renderizacao de chunk (as duas formas testadas na grade):
-  raw_chunk()   k=v de todos os campos do registro
-  verb_chunk()  prosa via template do sistema
-e a variante de chave:
-  bare    codigo nu             'GRU'
-  ns      codigo com namespace  'iata:GRU'
+chunk rendering (the two forms tested in the grid):
+  raw_chunk()   k=v of every field of the record
+  verb_chunk()  prose through the system's template
+and the key variant:
+  bare    bare code              'GRU'
+  ns      code with namespace    'iata:GRU'
 """
 import json
 
@@ -32,9 +32,9 @@ def _j(v):
     return ", ".join(str(x) for x in v) if isinstance(v, (list, tuple)) else str(v)
 
 
-# ----- prosa curada por sistema -------------------------------------------------
-# verb: template. filt: predicado opcional sobre o registro (ex: tirar linhas
-# 'unassigned' do registro IANA, que sao 436 de 500 e nao descrevem nada).
+# ----- curated prose per system -------------------------------------------------
+# verb: template. filt: optional predicate over the record (e.g. drop the
+# 'unassigned' rows of the IANA registry, 436 of 500, which describe nothing).
 
 def _country_i31(r):
     return (f"O país {r.label} tem código ISO 3166 alpha-3 {r.code}, alpha-2 {r.f('aliases')}, "
@@ -62,7 +62,7 @@ SPECS = {
                                    f"número atômico {r.f('AtomicNumber')}.")},
     "cmp/sts": {"verb": lambda r: f"O código de status HTTP {r.code} significa {r.label}.",
                 "filt": lambda r: r.status != "unassigned"},
-    # tabelas de codigo curto que NAO cruzam por chave (contraste de universalidade)
+    # short-code tables that do NOT join by key (universality contrast)
     "bio/aa1": {"verb": lambda r: (f"O aminoácido {r.label}, código de 1 letra {r.code}, "
                                    f"de 3 letras {r.f('three_letter')}.")},
     "bio/aa3": {"verb": lambda r: (f"O aminoácido {r.label}, código de 3 letras {r.code}, "
@@ -111,7 +111,7 @@ def _records(system_id):
 
 
 def load(system_id):
-    """registros de um sistema curado, na ordem do parquet, com o filtro do spec."""
+    """records of a curated system, in parquet order, with the spec filter applied."""
     filt = SPECS[system_id].get("filt")
     return [r for r in _records(system_id) if not filt or filt(r)]
 
@@ -121,11 +121,11 @@ def load_all(nodes=None):
 
 
 def published():
-    """system_id de todo sistema publicado no hub, do systems.parquet."""
+    """system_id of every system published on the hub, from systems.parquet."""
     t = pq.read_table(f"{conf.hub()}/systems.parquet", columns=["system_id", "name"]).to_pylist()
     return {r["system_id"]: r["name"] for r in t}
 
 
 def codes(system_id):
-    """so a coluna code de um sistema, para medidas sobre o dataset inteiro."""
+    """only the code column of a system, for measures over the whole dataset."""
     return pq.read_table(conf.parquet(system_id), columns=["code"]).column("code").to_pylist()

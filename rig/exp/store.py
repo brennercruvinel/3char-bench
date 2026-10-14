@@ -1,20 +1,19 @@
 #!/usr/bin/env python3
 """
-store.py  -  experimento 4: armazenamento otimo sem perda + custo do vetor.
+store.py  -  experiment 4: lossless storage + vector cost.
 
-duas camadas, medidas separadamente:
+two layers, measured separately:
 
-A. DADO (precisa ser sem perda - e a fonte da resposta).
-   compara, sobre o corpus curado: arquivo cru concatenado, registro-por-linha
-   (JSONL, o formato 'graceful-line' que sobrevive a corte), e ambos sob gzip.
+A. DATA (must be lossless - it is the source of the answer).
+   compares, over the curated corpus: raw file concatenated, record-per-line (JSONL, the
+   'graceful-line' format that survives truncation), and both under gzip.
 
-B. VETOR (pode ser aproximado - reconstruivel do dado).
-   mesmo conjunto de registros embutido uma vez (e5, verb+ns, o vencedor da
-   grade); compara o tamanho serializado e o recall retido de tres indices faiss:
-   Flat fp32 (exato), ScalarQuantizer 8-bit (4x menor), PQ (m=48). mostra ate
-   onde da pra comprimir o vetor sem matar o recall.
+B. VECTOR (may be approximate - reconstructible from the data).
+   the same set of records embedded once (e5, verb+ns, the grid winner); compares the serialized
+   size and the retained recall of three faiss indexes: Flat fp32 (exact), ScalarQuantizer 8-bit
+   (4x smaller), PQ (m=48). shows how far the vector can be compressed without killing recall.
 
-escreve out/store.json.
+writes out/store.json.
 """
 import gzip
 import json
@@ -108,7 +107,7 @@ def vector_layer(corpus, questions):
     out["scalar_q8"] = {"bytes": _sz(faiss.serialize_index(sq)),
                         "recall@1": r1, "recall@5": r5}
 
-    m = 48  # 384 / 8; 48 bytes/vetor
+    m = 48  # 384 / 8; 48 bytes per vector
     pq = faiss.IndexPQ(d, m, 8, faiss.METRIC_INNER_PRODUCT)
     pq.train(dv)
     pq.add(dv)

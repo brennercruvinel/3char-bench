@@ -1,0 +1,28 @@
+cff-version: "1.2.0"
+message: >-
+  If you use this software in your work, please cite the version you used with the
+  metadata in this file.
+title: 3char-bench
+type: software
+version: "0.1.1"
+date-released: "2026-09-12"
+authors:
+  - name: "Brenner Viana Cruvinel"
+    given-names: Brenner
+    family-names: Viana Cruvinel
+    orcid: https://orcid.org/0009-0002-3079-8829
+    affiliation: Hoff Research
+    website: https://hoffresearch.com
+abstract: >-
+  Retrieval rig for the 3char dataset: measures chunk granularity, chunk form, key form and vector
+  storage for short code tables on a fixed sample of ten systems and 51 verified questions, with two
+  small embedders. Every number regenerates from the published Parquet with a fixed seed.
+license: MIT
+repository-code: https://github.com/brennercruvinel/3char-bench
+keywords:
+  - retrieval
+  - chunking
+  - embeddings
+  - code systems
+  - identifiers
+  - evaluation

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""jio.py  -  leitura/escrita de artefatos json em out/, determinista e legivel."""
+"""jio.py  -  read/write json artifacts in out/, deterministic and readable."""
 import json
 
 import conf
