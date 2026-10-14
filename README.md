@@ -1,71 +1,78 @@
 # 3char-bench
 
-An experimental report on presenting the [3char](https://huggingface.co/datasets/brennercruvinel/3char) tables to a dense retriever: which chunk granularity, chunk form, key form and vector storage retrieve the right record. All measurements use a fixed sample and a fixed seed. This repository holds the rig and its outputs; the Parquet files and the two embedders are downloaded from the Hugging Face Hub on the first run.
+When a code list from [3char](https://huggingface.co/datasets/brennercruvinel/3char) is indexed for a dense retriever, how should each record be written, and how much should go into each chunk, for the right row to come back? This repository answers that question on a fixed sample of ten systems and 51 questions with two small embedders, and reports what the sample can and cannot support. It contains the experimental rig and its outputs; the Parquet files and the embedders are downloaded from the Hugging Face Hub on the first run.
 
 ## Setup
 
-- **Systems:** 10 of the 58 published systems: `lng/i31`, `lng/ioc`, `trp/iata`, `trp/icao`, `fin/i42`, `cls/elm`, `cmp/sts`, `bio/aa1`, `bio/aa3` and `com/mor`.
-- **Records:** 2,123. Systems with more than 600 rows are sampled down to 600, keeping every answer record (seed 20260623).
-- **Questions:** 51 natural-language questions, each with exactly one answer record, verified against the Parquet files before any run (`rig/lib/qa.py`). 38 belong to family A (code to entity) and 13 to family B (entity to code).
-- **Embedders:** all-MiniLM-L6-v2 and multilingual-e5-small, as ONNX exports, with cosine similarity over normalized vectors. The e5 model uses its standard `query:` and `passage:` prefixes.
-- **Language:** the questions, the prose templates and the routing phrases are written in Portuguese. multilingual-e5-small is a multilingual model, while all-MiniLM-L6-v2 was trained on English text.
-- **Token counts:** o200k_base. Without `tiktoken`, the rig falls back to an estimate and records that it did so.
+The sample covers ten systems chosen to span domains and code lengths: `lng/i31`, `lng/ioc`, `trp/iata`, `trp/icao`, `fin/i42`, `cls/elm`, `cmp/sts`, `bio/aa1`, `bio/aa3` and `com/mor`. Systems with more than 600 rows are sampled down to 600, always keeping the answer records, which gives 2,123 records (seed 20260623). The systems were not drawn at random from the 58, so the results describe these systems only.
 
-The ten systems were chosen to cover domains and code lengths, not drawn at random from the 58, so the results describe these systems and these 51 questions. The grid has not been run over all 58 systems.
+There are 51 natural-language questions, each with exactly one answer record, verified against the Parquet files before any run (`rig/lib/qa.py`). Thirty-eight ask for the entity behind a code and thirteen for the code of an entity. The questions, the prose templates used to write records and the phrases used in the routing test are in Portuguese.
 
-## Metrics
+The embedders are multilingual-e5-small, a multilingual model used with its standard `query:` and `passage:` prefixes, and all-MiniLM-L6-v2, which was trained on English text. Both run as ONNX exports, with cosine similarity over normalized vectors. Token counts use the o200k_base tokenizer; without `tiktoken`, the rig falls back to an estimate and records that it did so.
 
-- **recall@k:** the fraction of the 51 questions whose answer record is among the top k chunks by cosine similarity.
-- **MRR:** the mean over questions of 1 / rank of the answer record.
-- **Tokens per answer:** the mean o200k_base token count of the top-1 chunk, which is the text a model would have to read to answer.
-- **Routing accuracy** (`collide.py`): the fraction of queries whose top-1 record belongs to the intended system, over 182 (literal, system) pairs drawn from the 60 most ambiguous literals in the sample. Three query forms are compared: the bare literal, the literal with the intended meaning in words, and the literal prefixed with the system name.
+## What counts as a hit
 
-With 51 questions, one question is worth 1.96 points of recall, so differences below about 4 points (two questions) are not interpreted.
+The main metric is recall@1, the share of questions whose answer record is in the top-ranked chunk, together with the number of tokens in that chunk, which is what a reader would have to process to answer. With 51 questions, one question is worth 1.96 points, so differences below about four points are not interpreted.
 
-## Grid
+A hit does not mean the same thing at every chunk size. When a chunk holds one record or a block of 20 records, retrieving it retrieves the answer row with little else; this is record retrieval. When a chunk holds a whole system, retrieving it only shows that the right list was found, and the row still has to be located among thousands of tokens; this is system retrieval. The two are reported separately and are not compared as if they measured the same thing.
 
-The grid crosses granularity (one record, a block of 20 records, or the whole system as one chunk), form (fields as `key=value` or one sentence of prose), key (bare `GRU` or namespaced `iata:GRU`) and embedder, for 24 cells in total. Recall@1 for every cell is shown below; recall@5 and MRR are in `rig/out/grid.json`.
+## Results
 
-| Granularity | Form | Key | e5 recall@1 | MiniLM recall@1 | Tokens per answer |
+The grid crosses chunk size (one record, a block of 20, a whole system), record form (fields as `key=value` or one sentence of prose), key form (bare `GRU` or namespaced `iata:GRU`) and embedder, for 24 cells. Recall@5 and MRR for every cell are in `rig/out/grid.json`.
+
+**Record retrieval** (recall@1):
+
+| Chunk | Form | Key | e5 | MiniLM | Tokens per answer |
 | --- | --- | --- | ---: | ---: | ---: |
-| Record | Prose | Bare | 92.2% | 52.9% | 22.6 |
-| Record | Prose | Namespaced | 88.2% | 52.9% | 27.0 |
-| Record | key=value | Bare | 60.8% | 29.4% | 35.4 |
-| Record | key=value | Namespaced | 72.5% | 39.2% | 39.9 |
+| One record | Prose | Bare | 92.2% | 52.9% | 22.6 |
+| One record | Prose | Namespaced | 88.2% | 52.9% | 27.0 |
+| One record | key=value | Bare | 60.8% | 29.4% | 35.4 |
+| One record | key=value | Namespaced | 72.5% | 39.2% | 39.9 |
 | Block of 20 | Prose | Bare | 47.1% | 29.4% | 459.8 |
 | Block of 20 | Prose | Namespaced | 47.1% | 27.5% | 549.6 |
 | Block of 20 | key=value | Bare | 21.6% | 15.7% | 741.9 |
 | Block of 20 | key=value | Namespaced | 31.4% | 11.8% | 831.7 |
-| Whole system | Prose | Bare | 84.3% | 82.4% | 6,257.9 |
-| Whole system | Prose | Namespaced | 90.2% | 82.4% | 7,467.1 |
-| Whole system | key=value | Bare | 52.9% | 60.8% | 8,659.0 |
-| Whole system | key=value | Namespaced | 64.7% | 60.8% | 9,868.2 |
 
-The two embedders do not share a best configuration. With e5, one record per chunk written as a sentence ranks first, at 92.2% recall@1 and 22.6 tokens per answer. With MiniLM, the whole system as one prose chunk ranks first (82.4% with either key), at 6,258 to 7,467 tokens per answer, while one record per sentence reaches 52.9%. MiniLM scores below e5 in 11 of the 12 configurations; the exception is the whole system as `key=value` with the bare key (60.8% against 52.9%).
+**System retrieval** (the whole system as one chunk; recall@1 here means the right system was ranked first):
 
-Two patterns hold for both embedders. Prose outperforms `key=value` in every pair of configurations that differ only in form. A block of 20 records retrieves less than both a single record and the whole system for every form and key, while costing about 20 times the tokens of a single record.
+| Form | Key | e5 | MiniLM | Tokens per answer |
+| --- | --- | ---: | ---: | ---: |
+| Prose | Bare | 84.3% | 82.4% | 6,257.9 |
+| Prose | Namespaced | 90.2% | 82.4% | 7,467.1 |
+| key=value | Bare | 52.9% | 60.8% | 8,659.0 |
+| key=value | Namespaced | 64.7% | 60.8% | 9,868.2 |
 
-The whole system as one chunk scores high because a hit only requires retrieving the right system; the reader must then find the row among thousands of tokens.
+### How should a record be written?
 
-## Other results
+As a sentence. Prose outperforms `key=value` in every pair of cells that differ only in form, for both embedders and at every chunk size. With e5 and one record per chunk, prose reaches 92.2% against 60.8%.
 
-- **Decomposition** (`decomp.json`; e5, one record per chunk, bare key). Dropping noisy fields from the `key=value` chunk without rewriting it lowers recall@1 by 5.9 points (60.8% to 54.9%) at 0.49 times the tokens. Rewriting the remaining fields as prose then raises recall@1 by 37.3 points, to 92.2%, at 1.31 times the tokens. The net change is +31.4 points at 0.64 times the original token count.
-- **Routing** (`collide.json`). With the bare literal as both query and document, the systems that share a literal cannot be told apart, and accuracy is 33.0%, the rate expected from a random choice among them. With the intended meaning in words, accuracy is 98.4% with MiniLM and 98.9% with e5. With the system name as a prefix, it is 100% with both.
-- **Collisions in the full dataset** (`collide.json`). Across the 58 published systems, 14,911 of 623,141 distinct case-folded literals belong to two or more systems, and `and` and `car` belong to eleven. These counts cover the full Parquet files, not the sample.
-- **Shared literals across domains** (`universal.json`). Eleven pairs of sampled systems from different domains share literals, and no literal spans more than three of the seven sampled domains. The five systems with a country key (`fin/i42`, `lng/i31`, `lng/ioc`, `trp/iata`, `trp/icao`) join through ISO 3166, with coverage of at least 99.1%; the rig found no join key for the other five. No join axis other than the country was tested.
-- **Vector storage** (`store.json`; e5, one record per sentence with the namespaced key, 2,123 vectors of dimension 384). An 8-bit scalar quantizer makes the index 4.0 times smaller and leaves recall@1 unchanged at 88.2%. Product quantization with 48 subquantizers makes it 6.6 times smaller and lowers recall@1 to 60.8%.
+A decomposition of that difference (`rig/out/decomp.json`; e5, one record, bare key) separates two steps. Removing noisy fields from the `key=value` chunk, without rewriting it, lowers recall@1 by 5.9 points (to 54.9%) and roughly halves the tokens. Rewriting the remaining fields as a sentence then adds 37.3 points, for 1.31 times the tokens of the trimmed chunk. The gain comes from the sentence form, not from removing fields.
 
-`hypo_results.json` holds 14 threshold checks on the sample (modal code length, vowel ratio, coverage, collision counts), evaluated by `rig/exp/hypo.py` against predicates in `hypotheses.json`. They describe the corpus rather than test hypotheses about a model, and all 14 pass by construction of their thresholds.
+### How much should go into a chunk?
 
-The rig also exposed a defect in release 0.1.0 of the dataset: the `lng/ioc` aliases were unlabelled and included a footnote marker stored as a code. The defect was fixed in release 0.1.1.
+One record. For every form, key and embedder, a block of 20 records retrieves the answer less often than a single record, while costing about 20 times as many tokens.
 
-## Limitations
+Whole-system chunks rank the right system first for 82.4% to 90.2% of questions in prose. That is a different outcome, not a better one: a reader still has to find the row among 6,000 to 7,500 tokens. With e5, one record per chunk retrieves the row itself more often (92.2%) at 22.6 tokens. With MiniLM, record retrieval is much weaker (52.9% at best), which may reflect the Portuguese questions as much as the model; this was not tested.
 
-- The study uses 51 questions, 10 systems, two small embedders and one run per cell. The ranking of configurations differs between the two embedders, and the absolute numbers do not estimate performance on other systems or models.
-- Because the questions and prose chunks are in Portuguese, the gap between the two embedders may reflect language coverage as much as model quality; this was not tested.
-- The answer key was written from the data by the person who built the rig. The questions are factual lookups, not real user queries.
-- With e5, the namespaced key costs two questions when one record is written as a sentence (88.2% against 92.2%). On a corpus where more literals collide, the sign may reverse, as the routing experiment suggests but does not show.
-- No reranker and no hybrid lexical retrieval were tested, and e5 was used without task instructions.
+The namespaced key has no consistent effect. With e5 it helps in `key=value` chunks (72.5% against 60.8%) and costs two questions in prose (88.2% against 92.2%).
+
+### Can a shared code be routed to the right system?
+
+Only with context (`rig/out/collide.json`). The test uses 182 pairs of a code and a system, drawn from the 60 codes shared by the most sampled systems, and asks whether the top-ranked record belongs to the intended system. With the bare code as both query and document, the systems that share it cannot be told apart, and accuracy is 33.0%, the rate of a random choice among them. With the intended meaning written out in the query, accuracy is 98.4% with MiniLM and 98.9% with e5. With the system name as a prefix of both query and document, it is 100% with both.
+
+### How small can the index be?
+
+An 8-bit scalar quantizer keeps recall (`rig/out/store.json`; e5, one record per sentence with the namespaced key, 2,123 vectors of dimension 384). It makes the index 4.0 times smaller and leaves recall@1 unchanged at 88.2%. Product quantization with 48 subquantizers makes it 6.6 times smaller and lowers recall@1 to 60.8%.
+
+### Descriptive outputs
+
+Two further outputs describe the corpus rather than retrieval. `rig/out/universal.json` finds that no literal in the sample spans more than three of its seven domains, and that the five systems with a country key (`fin/i42`, `lng/i31`, `lng/ioc`, `trp/iata`, `trp/icao`) join through ISO 3166 with at least 99.1% coverage; no other join key was tested. `rig/out/hypo_results.json` holds 14 threshold checks on the sample, such as modal code length and vowel ratio; their thresholds were set with knowledge of the data, so they describe the corpus and are not tests of hypotheses.
+
+While building the rig, a check that every IOC alias resolves in ISO 3166 exposed a defect in release 0.1.0 of the dataset (unlabelled aliases, including a footnote marker stored as a code), which was fixed in release 0.1.1.
+
+## What this does not show
+
+The study uses 51 questions, ten systems, two small embedders and one run per cell. The answer key was written from the data by the person who built the rig, and the questions are factual lookups rather than real user queries. Because the questions and prose are in Portuguese, the difference between the embedders may reflect language coverage as much as model quality. No reranker, hybrid lexical retrieval or task instructions for e5 were tested. The absolute numbers do not estimate performance on other systems or models.
 
 ## Reproducing
 
@@ -75,10 +82,6 @@ bash rig/bootstrap.sh            # creates the venv with uv, installs pinned dep
 .venv/bin/python rig/run.py grid # runs a single experiment
 ```
 
-`CH3_HUB`, `CH3_MINILM`, `CH3_E5` and `CH3_OUT` override the dataset, embedder and output folders.
-
-- `rig/lib/`: configuration, catalog, questions, corpus, embedding, tokenization and JSON I/O.
-- `rig/exp/`: the six experiments (grid, decomp, collide, universal, store, hypo).
-- `rig/out/`: the versioned JSON outputs, regenerated by `run.py`.
+`CH3_HUB`, `CH3_MINILM`, `CH3_E5` and `CH3_OUT` override the dataset, embedder and output folders. The experiments are in `rig/exp/` (`grid`, `decomp`, `collide`, `universal`, `store`, `hypo`), the shared code in `rig/lib/`, and the versioned outputs in `rig/out/`, one JSON file per experiment.
 
 The code is released under the MIT license. The dataset and the embedders carry their own terms.
